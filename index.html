@@ -72,6 +72,26 @@
       transition: all 0.3s;
     }
 
+    .subcategory-filter {
+      min-width: 150px;
+    }
+
+    .subcategory-filter select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      color: #00ffc8;
+      background-color: #111;
+      border: 2px solid #00ffc8;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .subcategory-filter select:focus {
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
     .category-filter select:focus {
       box-shadow: 0 0 10px #00ffc8;
     }
@@ -179,12 +199,27 @@
       background: #111;
       border: 2px solid #00ffc8;
       border-radius: 10px;
-      width: 90%;
-      max-width: 1200px;
-      height: 90%;
+      width: 95%;
+      max-width: 1400px;
+      height: 95%;
       display: flex;
       flex-direction: column;
       box-shadow: 0 0 30px #00ffc8;
+      transition: all 0.3s ease;
+    }
+
+    .modal-content.fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      border-radius: 0 !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+    }
+
+    .modal-content.fullscreen .modal-header {
+      background: rgba(0, 0, 0, 0.8);
     }
 
     .modal-header {
@@ -224,16 +259,36 @@
       border: 1px solid #00ffc820;
       border-radius: 8px;
       background: #000;
+      overflow: auto;
+      position: relative;
+    }
+
+    .pdf-viewer canvas {
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.1);
     }
 
     .viewer-controls {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
       gap: 10px;
-      padding: 10px;
+      padding: 15px;
       background: #222;
       border-radius: 8px;
       margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .viewer-controls .left-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .viewer-controls .right-controls {
+      display: flex;
+      gap: 10px;
     }
 
     .viewer-controls button {
@@ -249,15 +304,71 @@
 
     .viewer-controls button:hover {
       background: #00ff88;
+      transform: translateY(-1px);
+    }
+
+    .viewer-controls button:active {
+      transform: translateY(0);
+    }
+
+    .page-input {
+      width: 60px;
+      padding: 5px;
+      text-align: center;
+      border: 1px solid #00ffc8;
+      background: #111;
+      color: #00ffc8;
+      border-radius: 4px;
+    }
+
+    .zoom-level {
+      min-width: 80px;
+      text-align: center;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      border-top: 2px solid #00ffc820;
+      padding: 30px 20px;
+      border-top: 2px solid #00ffc840;
       color: #00ffc8;
       font-size: 0.9rem;
-      background: #010101;
+      background: linear-gradient(90deg, #001, #010b13);
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: #00ffc8;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      color: #00ff88;
+      transform: translateY(-2px);
+      text-shadow: 0 0 10px #00ffc8;
+    }
+
+    .footer-copyright {
+      border-top: 1px solid #00ffc820;
+      padding-top: 20px;
+      color: #aaa;
     }
 
     .loading {
@@ -290,6 +401,59 @@
       animation: fadeIn 0.5s ease-out;
     }
 
+    /* Professional Enhancements */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: rgba(0, 255, 200, 0.1);
+      border-radius: 25px;
+      border: 1px solid #00ffc840;
+      width: fit-content;
+      font-size: 0.9rem;
+      color: #00ffc8;
+    }
+
+    .stats-bar span {
+      margin: 0 15px;
+    }
+
+    /* Smooth scrolling for PDF viewer */
+    .pdf-viewer::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pdf-viewer::-webkit-scrollbar-track {
+      background: #111;
+    }
+
+    .pdf-viewer::-webkit-scrollbar-thumb {
+      background: #00ffc8;
+      border-radius: 4px;
+    }
+
+    .pdf-viewer::-webkit-scrollbar-thumb:hover {
+      background: #00ff88;
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+      border: 3px solid #111;
+      border-top: 3px solid #00ffc8;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       header {
@@ -307,6 +471,14 @@
         width: 95%;
         height: 95%;
       }
+      .viewer-controls {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .viewer-controls .left-controls,
+      .viewer-controls .right-controls {
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -322,9 +494,23 @@
         <option value="">All Categories</option>
       </select>
     </div>
+    <div class="subcategory-filter">
+      <select id="subcategory">
+        <option value="">All Subcategories</option>
+      </select>
+    </div>
   </div>
 
-  <div id="pdf-grid" class="loading">Loading writeups...</div>
+  <div class="stats-bar">
+    <span id="total-files">Total Files: 0</span>
+    <span id="total-size">Total Size: 0 MB</span>
+    <span id="last-updated">Last Updated: --</span>
+  </div>
+
+  <div id="pdf-grid" class="loading">
+    <div class="loading-spinner"></div>
+    <div style="margin-top: 20px;">Loading writeups...</div>
+  </div>
 
   <!-- Modal for PDF Viewer -->
   <div id="pdf-modal" class="modal">
@@ -335,19 +521,39 @@
       </div>
       <div class="modal-body">
         <div class="viewer-controls">
-          <button id="prev-page">Previous</button>
-          <span id="page-info">Page 1 of 1</span>
-          <button id="next-page">Next</button>
-          <button id="zoom-in">Zoom In</button>
-          <button id="zoom-out">Zoom Out</button>
-          <button id="download-pdf">Download</button>
+          <div class="left-controls">
+            <button id="prev-page">◀ Prev</button>
+            <input type="number" id="page-input" class="page-input" min="1" value="1">
+            <span id="page-info">of 1</span>
+            <button id="next-page">Next ▶</button>
+          </div>
+          <div class="right-controls">
+            <button id="zoom-out">🔍-</button>
+            <span id="zoom-level" class="zoom-level">100%</span>
+            <button id="zoom-in">🔍+</button>
+            <button id="fit-width">Fit Width</button>
+            <button id="fullscreen">⛶ Fullscreen</button>
+            <button id="download-pdf">💾 Download</button>
+          </div>
         </div>
         <div id="pdf-viewer" class="pdf-viewer"></div>
       </div>
     </div>
   </div>
 
-  <footer>🔄 Updated automatically from GitHub | ⚙️ Powered by RootStriker</footer>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="https://github.com/0xStr1k3r" target="_blank">🐙 GitHub</a>
+        <a href="https://linkedin.com/in/your-profile" target="_blank">💼 LinkedIn</a>
+        <a href="mailto:your.email@example.com">📧 Email</a>
+        <a href="https://your-portfolio.com" target="_blank">🌐 Portfolio</a>
+      </div>
+      <div class="footer-copyright">
+        🔄 Updated automatically from GitHub | ⚙️ Powered by RootStriker | © 2024 All rights reserved
+      </div>
+    </div>
+  </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
@@ -357,28 +563,45 @@
     let currentPdfDoc = null;
     let currentPage = 1;
     let currentScale = 1.5;
+    let isFullscreen = false;
 
     async function loadPDFs() {
       try {
         const res = await fetch("files.json");
         allFiles = await res.json();
 
-        // Extract categories from paths
-        const categories = new Set();
+        // Extract categories and subcategories from paths
+        const categories = new Map();
         allFiles.forEach(file => {
           const pathParts = file.path.split('/');
           if (pathParts.length > 1) {
-            categories.add(pathParts[0]);
+            const category = pathParts[0];
+            const subcategory = pathParts.length > 2 ? pathParts[1] : '';
+
+            if (!categories.has(category)) {
+              categories.set(category, new Set());
+            }
+            if (subcategory) {
+              categories.get(category).add(subcategory);
+            }
           }
         });
 
         const categorySelect = document.getElementById("category");
-        categories.forEach(cat => {
+        categories.forEach((subcats, cat) => {
           const option = document.createElement("option");
           option.value = cat;
           option.textContent = cat;
           categorySelect.appendChild(option);
         });
+
+        // Update stats
+        const totalSize = allFiles.reduce((sum, file) => sum + (file.size || 0), 0);
+        const lastModified = allFiles.length > 0 ? new Date(Math.max(...allFiles.map(f => new Date(f.last_modified)))) : new Date();
+
+        document.getElementById("total-files").textContent = `Total Files: ${allFiles.length}`;
+        document.getElementById("total-size").textContent = `Total Size: ${(totalSize / (1024 * 1024)).toFixed(2)} MB`;
+        document.getElementById("last-updated").textContent = `Last Updated: ${lastModified.toLocaleDateString()}`;
 
         renderPDFs();
       } catch (err) {
@@ -388,7 +611,7 @@
       }
     }
 
-    function renderPDFs(query = "", category = "") {
+    function renderPDFs(query = "", category = "", subcategory = "") {
       const grid = document.getElementById("pdf-grid");
       grid.innerHTML = "";
 
@@ -398,6 +621,10 @@
 
       if (category) {
         filtered = filtered.filter(f => f.path.startsWith(category + '/'));
+      }
+
+      if (subcategory) {
+        filtered = filtered.filter(f => f.path.includes('/' + subcategory + '/'));
       }
 
       if (filtered.length === 0) {
@@ -468,7 +695,9 @@
       pdfViewer.innerHTML = '';
       pdfViewer.appendChild(canvas);
 
-      document.getElementById("page-info").textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
+      document.getElementById("page-info").textContent = `of ${currentPdfDoc.numPages}`;
+      document.getElementById("page-input").value = currentPage;
+      document.getElementById("zoom-level").textContent = Math.round(currentScale * 100) + '%';
     }
 
     // Event listeners
@@ -477,7 +706,46 @@
     });
 
     document.getElementById("category").addEventListener("change", e => {
-      renderPDFs(document.getElementById("search").value, e.target.value);
+      const selectedCategory = e.target.value;
+      const subcategorySelect = document.getElementById("subcategory");
+
+      // Clear existing subcategories
+      subcategorySelect.innerHTML = '<option value="">All Subcategories</option>';
+
+      if (selectedCategory) {
+        // Extract categories and subcategories from paths
+        const categories = new Map();
+        allFiles.forEach(file => {
+          const pathParts = file.path.split('/');
+          if (pathParts.length > 1) {
+            const category = pathParts[0];
+            const subcategory = pathParts.length > 2 ? pathParts[1] : '';
+
+            if (!categories.has(category)) {
+              categories.set(category, new Set());
+            }
+            if (subcategory) {
+              categories.get(category).add(subcategory);
+            }
+          }
+        });
+
+        const subcats = categories.get(selectedCategory);
+        if (subcats) {
+          subcats.forEach(subcat => {
+            const option = document.createElement("option");
+            option.value = subcat;
+            option.textContent = subcat;
+            subcategorySelect.appendChild(option);
+          });
+        }
+      }
+
+      renderPDFs(document.getElementById("search").value, selectedCategory, document.getElementById("subcategory").value);
+    });
+
+    document.getElementById("subcategory").addEventListener("change", e => {
+      renderPDFs(document.getElementById("search").value, document.getElementById("category").value, e.target.value);
     });
 
     document.querySelector(".close").addEventListener("click", () => {
@@ -507,6 +775,38 @@
     document.getElementById("zoom-out").addEventListener("click", () => {
       currentScale /= 1.2;
       renderPage();
+    });
+
+    document.getElementById("fit-width").addEventListener("click", async () => {
+      if (!currentPdfDoc) return;
+      const page = await currentPdfDoc.getPage(currentPage);
+      const viewport = page.getViewport({ scale: 1 });
+      const containerWidth = document.getElementById("pdf-viewer").clientWidth - 40;
+      currentScale = containerWidth / viewport.width;
+      renderPage();
+    });
+
+    document.getElementById("fullscreen").addEventListener("click", () => {
+      const modalContent = document.querySelector(".modal-content");
+      if (isFullscreen) {
+        modalContent.classList.remove("fullscreen");
+        isFullscreen = false;
+        document.getElementById("fullscreen").textContent = "⛶ Fullscreen";
+      } else {
+        modalContent.classList.add("fullscreen");
+        isFullscreen = true;
+        document.getElementById("fullscreen").textContent = "⛶ Exit Fullscreen";
+      }
+    });
+
+    document.getElementById("page-input").addEventListener("change", (e) => {
+      const pageNum = parseInt(e.target.value);
+      if (pageNum >= 1 && pageNum <= currentPdfDoc.numPages) {
+        currentPage = pageNum;
+        renderPage();
+      } else {
+        e.target.value = currentPage;
+      }
     });
 
     document.getElementById("download-pdf").addEventListener("click", () => {

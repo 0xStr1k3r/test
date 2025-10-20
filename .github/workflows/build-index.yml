@@ -1,0 +1,68 @@
+name: Build files.json (Auto PDF Index)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:    # allow manual runs too
+
+permissions:
+  contents: write       # allow committing files.json back
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧠 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # full history for git log dates
+
+      - name: ⚙️ Generate files.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          branch="main"
+          out="files.json"
+
+          echo "Scanning repo for PDF files..."
+          mapfile -t files < <(git ls-files '*.pdf' || true)
+
+          echo "[" > "$out"
+          first=true
+          for f in "${files[@]}"; do
+            last_date=$(git log -1 --format=%cI -- "$f" || echo "")
+            raw_url="https://raw.githubusercontent.com/${repo}/${branch}/${f}"
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> "$out"
+            fi
+            jq -nc --arg p "$f" \
+                    --arg n "$(basename "$f")" \
+                    --arg r "$raw_url" \
+                    --arg d "$last_date" \
+              '{path:$p, name:$n, raw_url:$r, last_modified:$d}' >> "$out"
+          done
+          echo "]" >> "$out"
+
+          # pretty print and validate JSON
+          jq . "$out" > tmp.json && mv tmp.json "$out"
+
+          echo "✅ Generated $out with $(jq length "$out") entries."
+          cat "$out"
+
+      - name: 📦 Commit and push if changed
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- files.json; then
+            echo "No changes to files.json."
+            exit 0
+          fi
+
+          git add files.json
+          git commit -m "🔄 Auto-update files.json"
+          git push origin main

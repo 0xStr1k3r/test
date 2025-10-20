@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RootStriker | Cybersecurity Writeups</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #0a0a0f;
+      color: #00ffc8;
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px #00ffc8;
+      border-bottom: 2px solid #00ffc840;
+      background: linear-gradient(90deg, #001, #010b13);
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      width: 80%;
+    }
+
+    .search-bar input {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px 15px;
+      font-size: 1.1rem;
+      color: #00ffc8;
+      background-color: #111;
+      border: 2px solid #00ffc8;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .search-bar input:focus {
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
+    #pdf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 30px;
+    }
+
+    .pdf-card {
+      background-color: #111;
+      border: 1px solid #00ffc855;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: 0.3s;
+      box-shadow: 0 0 15px #00ffc820;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pdf-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #00ffc890;
+    }
+
+    .pdf-title {
+      color: #00ffc8;
+      margin: 10px 0;
+      font-size: 1rem;
+      font-weight: bold;
+      text-shadow: 0 0 5px #00ffc8;
+    }
+
+    .pdf-date {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: 8px;
+      border: 1px solid #00ffc820;
+      background: #000;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 2px solid #00ffc820;
+      color: #00ffc8;
+      font-size: 0.9rem;
+      background: #010101;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2rem;
+      padding: 50px;
+      color: #00ffc8;
+    }
+
+    .no-results {
+      text-align: center;
+      font-size: 1rem;
+      color: #ff0044;
+      padding: 20px;
+    }
+
+    /* Neon glow animation */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 5px #00ffc8; }
+      50% { box-shadow: 0 0 20px #00ffc8; }
+      100% { box-shadow: 0 0 5px #00ffc8; }
+    }
+  </style>
+</head>
+<body>
+  <header>⚡ RootStriker | Cybersecurity Writeups</header>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search writeups by name..." />
+  </div>
+
+  <div id="pdf-grid" class="loading">Loading writeups...</div>
+
+  <footer>🔄 Updated automatically from GitHub | ⚙️ Powered by RootStriker</footer>
+
+  <script>
+    async function loadPDFs() {
+      try {
+        const res = await fetch("files.json");
+        const files = await res.json();
+        const grid = document.getElementById("pdf-grid");
+        const searchInput = document.getElementById("search");
+
+        const render = (query = "") => {
+          grid.innerHTML = "";
+          const filtered = files.filter(f =>
+            f.name.toLowerCase().includes(query.toLowerCase())
+          );
+
+          if (filtered.length === 0) {
+            grid.innerHTML = "<div class='no-results'>🚫 No matching writeups found</div>";
+            return;
+          }
+
+          filtered.forEach(file => {
+            const div = document.createElement("div");
+            div.className = "pdf-card";
+            div.innerHTML = `
+              <iframe src="https://docs.google.com/gview?url=${file.raw_url}&embedded=true"></iframe>
+              <div class="pdf-title">${file.name}</div>
+              <div class="pdf-date">🕓 ${new Date(file.last_modified).toLocaleString()}</div>
+            `;
+            grid.appendChild(div);
+          });
+        };
+
+        render();
+
+        searchInput.addEventListener("input", e => {
+          render(e.target.value);
+        });
+      } catch (err) {
+        document.getElementById("pdf-grid").innerHTML =
+          "<div class='no-results'>⚠️ Error loading files.json. Please check your GitHub Pages setup.</div>";
+        console.error(err);
+      }
+    }
+
+    loadPDFs();
+  </script>
+</body>
+</html>

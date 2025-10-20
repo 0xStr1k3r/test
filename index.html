@@ -302,10 +302,7 @@
       background: #000;
       overflow: auto;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      display: block;
       padding: 20px;
       box-sizing: border-box;
     }
@@ -324,11 +321,14 @@
     }
 
     .modal-content.fullscreen .pdf-viewer {
+      display: block;
       padding: 10px;
       overflow-y: auto;
       overflow-x: hidden;
       cursor: default;
       scroll-behavior: smooth;
+      height: 100%;
+      box-sizing: border-box;
     }
 
     .modal-content.fullscreen .pdf-viewer::-webkit-scrollbar {
@@ -353,6 +353,21 @@
       max-width: calc(100vw - 40px);
       box-shadow: 0 0 50px rgba(0, 255, 200, 0.3);
       cursor: text;
+      margin-bottom: 20px;
+    }
+
+    /* Touch scrolling support for mobile */
+    .modal-content.fullscreen .pdf-viewer {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+
+    /* Ensure proper scrolling on mobile devices */
+    @media (max-width: 768px) {
+      .modal-content.fullscreen .pdf-viewer {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
     }
 
     .viewer-controls {
@@ -735,6 +750,9 @@
       isFullscreen = true;
       document.getElementById("fullscreen").textContent = "⛶ Exit Fullscreen";
 
+      // Show loading spinner
+      pdfViewer.innerHTML = '<div class="loading-spinner" style="margin: 50px auto;"></div><div style="text-align: center; color: #00ffc8; margin-top: 20px;">Loading PDF...</div>';
+
       try {
         const loadingTask = pdfjsLib.getDocument(url);
         currentPdfDoc = await loadingTask.promise;
@@ -756,33 +774,46 @@
       const pdfViewer = document.getElementById("pdf-viewer");
       pdfViewer.innerHTML = '';
 
-      for (let pageNum = 1; pageNum <= currentPdfDoc.numPages; pageNum++) {
-        const page = await currentPdfDoc.getPage(pageNum);
-        const viewport = page.getViewport({ scale: currentScale });
+      // Render pages in batches for better performance
+      const batchSize = 5;
+      for (let batchStart = 1; batchStart <= currentPdfDoc.numPages; batchStart += batchSize) {
+        const batchEnd = Math.min(batchStart + batchSize - 1, currentPdfDoc.numPages);
+        const promises = [];
 
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+        for (let pageNum = batchStart; pageNum <= batchEnd; pageNum++) {
+          promises.push(renderPageAsync(pageNum));
+        }
 
-        // Enable text selection
-        canvas.style.userSelect = 'text';
-        canvas.style.webkitUserSelect = 'text';
-        canvas.style.mozUserSelect = 'text';
-        canvas.style.msUserSelect = 'text';
-
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-
-        await page.render(renderContext).promise;
-        pdfViewer.appendChild(canvas);
+        await Promise.all(promises);
       }
 
       document.getElementById("page-info").textContent = `of ${currentPdfDoc.numPages}`;
       document.getElementById("page-input").value = currentPage;
       document.getElementById("zoom-level").textContent = Math.round(currentScale * 100) + '%';
+    }
+
+    async function renderPageAsync(pageNum) {
+      const page = await currentPdfDoc.getPage(pageNum);
+      const viewport = page.getViewport({ scale: currentScale });
+
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // Enable text selection
+      canvas.style.userSelect = 'text';
+      canvas.style.webkitUserSelect = 'text';
+      canvas.style.mozUserSelect = 'text';
+      canvas.style.msUserSelect = 'text';
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+
+      await page.render(renderContext).promise;
+      document.getElementById("pdf-viewer").appendChild(canvas);
     }
 
     async function renderPage() {
@@ -869,12 +900,12 @@
 
     document.getElementById("zoom-in").addEventListener("click", () => {
       currentScale = Math.min(currentScale * 1.2, 3.0); // Max zoom 300%
-      renderPage();
+      renderAllPages();
     });
 
     document.getElementById("zoom-out").addEventListener("click", () => {
       currentScale = Math.max(currentScale / 1.2, 0.5); // Min zoom 50%
-      renderPage();
+      renderAllPages();
     });
 
     async function fitToWidth() {
@@ -927,26 +958,50 @@
             e.preventDefault();
             if (currentPage > 1) {
               currentPage--;
-              renderPage();
+              scrollToPage(currentPage);
             }
             break;
           case "ArrowRight":
             e.preventDefault();
             if (currentPage < currentPdfDoc.numPages) {
               currentPage++;
-              renderPage();
+              scrollToPage(currentPage);
             }
+            break;
+          case "ArrowUp":
+            e.preventDefault();
+            scrollViewer(-50);
+            break;
+          case "ArrowDown":
+            e.preventDefault();
+            scrollViewer(50);
+            break;
+          case "PageUp":
+            e.preventDefault();
+            scrollViewer(-window.innerHeight * 0.8);
+            break;
+          case "PageDown":
+            e.preventDefault();
+            scrollViewer(window.innerHeight * 0.8);
+            break;
+          case "Home":
+            e.preventDefault();
+            scrollToPage(1);
+            break;
+          case "End":
+            e.preventDefault();
+            scrollToPage(currentPdfDoc.numPages);
             break;
           case "+":
           case "=":
             e.preventDefault();
             currentScale = Math.min(currentScale * 1.2, 3.0);
-            renderPage();
+            renderAllPages();
             break;
           case "-":
             e.preventDefault();
             currentScale = Math.max(currentScale / 1.2, 0.5);
-            renderPage();
+            renderAllPages();
             break;
           case "f":
           case "F":
@@ -961,6 +1016,14 @@
         }
       }
     });
+
+    function scrollViewer(deltaY) {
+      const pdfViewer = document.getElementById("pdf-viewer");
+      pdfViewer.scrollBy({
+        top: deltaY,
+        behavior: 'smooth'
+      });
+    }
 
     // Close modal when clicking outside
     window.addEventListener("click", e => {

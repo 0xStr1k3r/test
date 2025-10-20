@@ -33,6 +33,7 @@ jobs:
           for f in "${files[@]}"; do
             last_date=$(git log -1 --format=%cI -- "$f" || echo "")
             raw_url="https://raw.githubusercontent.com/${repo}/${branch}/${f}"
+            file_size=$(stat -f%z "$f" 2>/dev/null || stat -c%s "$f" 2>/dev/null || echo "0")
             if [ "$first" = true ]; then
               first=false
             else
@@ -42,7 +43,8 @@ jobs:
                     --arg n "$(basename "$f")" \
                     --arg r "$raw_url" \
                     --arg d "$last_date" \
-              '{path:$p, name:$n, raw_url:$r, last_modified:$d}' >> "$out"
+                    --arg s "$file_size" \
+              '{path:$p, name:$n, raw_url:$r, last_modified:$d, size:$s}' >> "$out"
           done
           echo "]" >> "$out"
 

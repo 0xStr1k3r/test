@@ -25,16 +25,23 @@
       background: linear-gradient(90deg, #001, #010b13);
     }
 
-    .search-bar {
+    .controls {
       display: flex;
       justify-content: center;
+      align-items: center;
       margin: 20px auto;
-      width: 80%;
+      width: 90%;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-bar {
+      flex: 1;
+      min-width: 200px;
     }
 
     .search-bar input {
       width: 100%;
-      max-width: 600px;
       padding: 10px 15px;
       font-size: 1.1rem;
       color: #00ffc8;
@@ -49,9 +56,29 @@
       box-shadow: 0 0 10px #00ffc8;
     }
 
+    .category-filter {
+      min-width: 150px;
+    }
+
+    .category-filter select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      color: #00ffc8;
+      background-color: #111;
+      border: 2px solid #00ffc8;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .category-filter select:focus {
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
     #pdf-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 25px;
       padding: 30px;
     }
@@ -62,15 +89,29 @@
       border-radius: 10px;
       padding: 15px;
       text-align: center;
-      transition: 0.3s;
+      transition: all 0.3s ease;
       box-shadow: 0 0 15px #00ffc820;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .pdf-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 20px #00ffc890;
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px #00ffc890;
+    }
+
+    .pdf-preview {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      border: 1px solid #00ffc820;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00ffc8;
+      font-size: 0.9rem;
     }
 
     .pdf-title {
@@ -81,18 +122,133 @@
       text-shadow: 0 0 5px #00ffc8;
     }
 
+    .pdf-category {
+      font-size: 0.8rem;
+      color: #00ff88;
+      margin-bottom: 5px;
+    }
+
     .pdf-date {
       font-size: 0.85rem;
       color: #aaa;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
 
-    iframe {
+    .pdf-size {
+      font-size: 0.8rem;
+      color: #00ff88;
+      margin-bottom: 10px;
+    }
+
+    .pdf-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-actions button {
+      background: #00ffc8;
+      color: #000;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+
+    .pdf-actions button:hover {
+      background: #00ff88;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
       width: 100%;
-      height: 300px;
-      border-radius: 8px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #111;
+      border: 2px solid #00ffc8;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 1200px;
+      height: 90%;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 30px #00ffc8;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #00ffc8;
+    }
+
+    .modal-title {
+      color: #00ffc8;
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    .close {
+      color: #00ffc8;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close:hover {
+      color: #ff0044;
+    }
+
+    .modal-body {
+      flex: 1;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pdf-viewer {
+      flex: 1;
       border: 1px solid #00ffc820;
+      border-radius: 8px;
       background: #000;
+    }
+
+    .viewer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      background: #222;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .viewer-controls button {
+      background: #00ffc8;
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    .viewer-controls button:hover {
+      background: #00ff88;
     }
 
     footer {
@@ -124,61 +280,250 @@
       50% { box-shadow: 0 0 20px #00ffc8; }
       100% { box-shadow: 0 0 5px #00ffc8; }
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pdf-card {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        font-size: 2rem;
+      }
+      #pdf-grid {
+        grid-template-columns: 1fr;
+        padding: 15px;
+      }
+      .controls {
+        flex-direction: column;
+        width: 95%;
+      }
+      .modal-content {
+        width: 95%;
+        height: 95%;
+      }
+    }
   </style>
 </head>
 <body>
   <header>⚡ RootStriker | Cybersecurity Writeups</header>
 
-  <div class="search-bar">
-    <input type="text" id="search" placeholder="Search writeups by name..." />
+  <div class="controls">
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Search writeups by name..." />
+    </div>
+    <div class="category-filter">
+      <select id="category">
+        <option value="">All Categories</option>
+      </select>
+    </div>
   </div>
 
   <div id="pdf-grid" class="loading">Loading writeups...</div>
 
+  <!-- Modal for PDF Viewer -->
+  <div id="pdf-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title"></h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="viewer-controls">
+          <button id="prev-page">Previous</button>
+          <span id="page-info">Page 1 of 1</span>
+          <button id="next-page">Next</button>
+          <button id="zoom-in">Zoom In</button>
+          <button id="zoom-out">Zoom Out</button>
+          <button id="download-pdf">Download</button>
+        </div>
+        <div id="pdf-viewer" class="pdf-viewer"></div>
+      </div>
+    </div>
+  </div>
+
   <footer>🔄 Updated automatically from GitHub | ⚙️ Powered by RootStriker</footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    let allFiles = [];
+    let currentPdfDoc = null;
+    let currentPage = 1;
+    let currentScale = 1.5;
+
     async function loadPDFs() {
       try {
         const res = await fetch("files.json");
-        const files = await res.json();
-        const grid = document.getElementById("pdf-grid");
-        const searchInput = document.getElementById("search");
+        allFiles = await res.json();
 
-        const render = (query = "") => {
-          grid.innerHTML = "";
-          const filtered = files.filter(f =>
-            f.name.toLowerCase().includes(query.toLowerCase())
-          );
-
-          if (filtered.length === 0) {
-            grid.innerHTML = "<div class='no-results'>🚫 No matching writeups found</div>";
-            return;
+        // Extract categories from paths
+        const categories = new Set();
+        allFiles.forEach(file => {
+          const pathParts = file.path.split('/');
+          if (pathParts.length > 1) {
+            categories.add(pathParts[0]);
           }
-
-          filtered.forEach(file => {
-            const div = document.createElement("div");
-            div.className = "pdf-card";
-            div.innerHTML = `
-              <iframe src="https://docs.google.com/gview?url=${file.raw_url}&embedded=true"></iframe>
-              <div class="pdf-title">${file.name}</div>
-              <div class="pdf-date">🕓 ${new Date(file.last_modified).toLocaleString()}</div>
-            `;
-            grid.appendChild(div);
-          });
-        };
-
-        render();
-
-        searchInput.addEventListener("input", e => {
-          render(e.target.value);
         });
+
+        const categorySelect = document.getElementById("category");
+        categories.forEach(cat => {
+          const option = document.createElement("option");
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
+        });
+
+        renderPDFs();
       } catch (err) {
         document.getElementById("pdf-grid").innerHTML =
           "<div class='no-results'>⚠️ Error loading files.json. Please check your GitHub Pages setup.</div>";
         console.error(err);
       }
     }
+
+    function renderPDFs(query = "", category = "") {
+      const grid = document.getElementById("pdf-grid");
+      grid.innerHTML = "";
+
+      let filtered = allFiles.filter(f =>
+        f.name.toLowerCase().includes(query.toLowerCase())
+      );
+
+      if (category) {
+        filtered = filtered.filter(f => f.path.startsWith(category + '/'));
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "<div class='no-results'>🚫 No matching writeups found</div>";
+        return;
+      }
+
+      filtered.forEach(file => {
+        const div = document.createElement("div");
+        div.className = "pdf-card";
+        const categoryName = file.path.split('/')[0] || 'General';
+        div.innerHTML = `
+          <div class="pdf-preview">📄 PDF Preview</div>
+          <div class="pdf-category">📁 ${categoryName}</div>
+          <div class="pdf-title">${file.name}</div>
+          <div class="pdf-date">🕓 ${new Date(file.last_modified).toLocaleString()}</div>
+          <div class="pdf-size">📊 ${(file.size / 1024).toFixed(1)} KB</div>
+          <div class="pdf-actions">
+            <button onclick="openModal('${file.raw_url}', '${file.name}')">View Full</button>
+            <a href="${file.raw_url}" download="${file.name}" style="text-decoration: none;">
+              <button>Download</button>
+            </a>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    async function openModal(url, title) {
+      const modal = document.getElementById("pdf-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const pdfViewer = document.getElementById("pdf-viewer");
+
+      modalTitle.textContent = title;
+      modal.style.display = "flex";
+
+      try {
+        const loadingTask = pdfjsLib.getDocument(url);
+        currentPdfDoc = await loadingTask.promise;
+        currentPage = 1;
+        currentScale = 1.5;
+        renderPage();
+      } catch (error) {
+        pdfViewer.innerHTML = "<div style='color: #ff0044; text-align: center; padding: 50px;'>Error loading PDF</div>";
+        console.error(error);
+      }
+    }
+
+    async function renderPage() {
+      if (!currentPdfDoc) return;
+
+      const page = await currentPdfDoc.getPage(currentPage);
+      const viewport = page.getViewport({ scale: currentScale });
+
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
+      };
+
+      await page.render(renderContext).promise;
+
+      const pdfViewer = document.getElementById("pdf-viewer");
+      pdfViewer.innerHTML = '';
+      pdfViewer.appendChild(canvas);
+
+      document.getElementById("page-info").textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
+    }
+
+    // Event listeners
+    document.getElementById("search").addEventListener("input", e => {
+      renderPDFs(e.target.value, document.getElementById("category").value);
+    });
+
+    document.getElementById("category").addEventListener("change", e => {
+      renderPDFs(document.getElementById("search").value, e.target.value);
+    });
+
+    document.querySelector(".close").addEventListener("click", () => {
+      document.getElementById("pdf-modal").style.display = "none";
+      currentPdfDoc = null;
+    });
+
+    document.getElementById("prev-page").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPage();
+      }
+    });
+
+    document.getElementById("next-page").addEventListener("click", () => {
+      if (currentPage < currentPdfDoc.numPages) {
+        currentPage++;
+        renderPage();
+      }
+    });
+
+    document.getElementById("zoom-in").addEventListener("click", () => {
+      currentScale *= 1.2;
+      renderPage();
+    });
+
+    document.getElementById("zoom-out").addEventListener("click", () => {
+      currentScale /= 1.2;
+      renderPage();
+    });
+
+    document.getElementById("download-pdf").addEventListener("click", () => {
+      const link = document.createElement('a');
+      link.href = currentPdfDoc.url || document.getElementById("modal-title").textContent;
+      link.download = document.getElementById("modal-title").textContent;
+      link.click();
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener("click", e => {
+      const modal = document.getElementById("pdf-modal");
+      if (e.target === modal) {
+        modal.style.display = "none";
+        currentPdfDoc = null;
+      }
+    });
 
     loadPDFs();
   </script>

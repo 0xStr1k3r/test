@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "name": "Sysinternals.md",
+    "path": "TryHackMe/Soc-1/Mod-4/Sysinternals.md",
+    "size": 7113,
+    "last_modified": "2025-10-21T21:18:46.681748",
+    "raw_url": "TryHackMe/Soc-1/Mod-4/Sysinternals.md"
+  },
+  {
+    "name": "Wazuh.md",
+    "path": "TryHackMe/Soc-1/Mod-4/Wazuh.md",
+    "size": 33604,
+    "last_modified": "2025-10-21T21:18:46.681748",
+    "raw_url": "TryHackMe/Soc-1/Mod-4/Wazuh.md"
+  },
+  {
+    "name": "Windows Event Logs.md",
+    "path": "TryHackMe/Soc-1/Mod-4/Windows Event Logs.md",
+    "size": 42838,
+    "last_modified": "2025-10-21T21:18:46.681748",
+    "raw_url": "TryHackMe/Soc-1/Mod-4/Windows Event Logs.md"
+  },
+  {
+    "name": "Critical.md",
+    "path": "TryHackMe/Soc-1/mod-6 Digital Forensics and Incident Response/Critical.md",
+    "size": 25585,
+    "last_modified": "2025-10-21T21:18:46.697749",
+    "raw_url": "TryHackMe/Soc-1/mod-6 Digital Forensics and Incident Response/Critical.md"
+  },
+  {
+    "name": "Unattended.md",
+    "path": "TryHackMe/Soc-1/mod-6 Digital Forensics and Incident Response/Unattended.md",
+    "size": 6866,
+    "last_modified": "2025-10-21T21:18:46.697749",
+    "raw_url": "TryHackMe/Soc-1/mod-6 Digital Forensics and Incident Response/Unattended.md"
+  },
+  {
+    "name": "sample.md",
+    "path": "sample.md",
+    "size": 386,
+    "last_modified": "2025-10-21T21:18:46.697749",
+    "raw_url": "sample.md"
+  }
+]

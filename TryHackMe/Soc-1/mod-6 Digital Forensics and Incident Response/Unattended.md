@@ -47,13 +47,13 @@ Whoever this someone is, it is evident they already know what to search for. Hmm
 use the tool registry explorer , open the file C:\Users\THM-RFedora\Desktop\kape-results\C\Users\THM-RFedora\NTUSER.DAT 
 then go to the folder Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery
 
-![[Pasted image 20251021113014.png]]
+![](../../../Images/Pasted%20image%2020251021113014.png)
 ```
 .pdf
 ```
 ##### What top-secret keyword was searched for using the search bar in Windows Explorer?
 same for this one also see the value of the data at the last 
-![[Pasted image 20251021113113.png]]
+![](../../../Images/Pasted%20image%2020251021113113.png)
 ```
 continental
 ```
@@ -76,11 +76,11 @@ create new case , enter the details , it will create database ,proceed further ,
  C:\Users\THM-RFedora\Desktop\kape-results\C
 ```
 as the data source 
-![[Pasted image 20251021114903.png]]
+![](../../../Images/Pasted%20image%2020251021114903.png)
 then 
 deselect all in the configure ingest , only select recent activity 
 after opening , data artifacts-> web downloads , search for the file according time given in the question  in task-1 
-![[Pasted image 20251021120634.png]]
+![](../../../Images/Pasted%20image%2020251021120634.png)
 ```
 7z2201-x64.exe
 ```
@@ -97,7 +97,7 @@ use registry explorer , load the hives which we did in the task task-3 , and ope
 Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\.png
 ```
 
-![[Pasted image 20251021122145.png]]
+![](../../../Images/Pasted%20image%2020251021122145.png)
 ```
 2022-11-19 12:10:21
 ```
@@ -123,7 +123,7 @@ JLECmd.exe -d "C:\Users\THM-RFedora\Desktop\kape-results\C\Users\THM-RFedora\App
 ```
 
 after running the command i found only one text file on the desktop 
-![[Pasted image 20251021124709.png]]
+![](../../../Images/Pasted%20image%2020251021124709.png)
 ```
 
 ```
@@ -137,13 +137,13 @@ We can see the value in the above screen shot , just change the format according
 ##### The contents of the file were exfiltrated to pastebin.com. What is the generated URL of the exfiltrated data?  
 we need to use the autopsy , open the last case that we did previously , go the data artifacts -> webhistory 
 check for pastebin.com in the time link **between** **12:05 PM to 12:45 PM on the 19th of November 2022** which is mentioned in the task-1
-![[Pasted image 20251021125608.png]]
+![](../../../Images/Pasted%20image%2020251021125608.png)
 ```
 https://pastebin.com/1FQASAav
 ```
 ##### What is the string that was copied to the pastebin URL?
 which is available from the previous question 
-![[Pasted image 20251021130027.png]]
+![](../../../Images/Pasted%20image%2020251021130027.png)
 ```
 ne7AIRhi3PdESy9RnOrN
 ```

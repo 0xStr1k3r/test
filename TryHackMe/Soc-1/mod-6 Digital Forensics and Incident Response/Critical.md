@@ -167,17 +167,17 @@ use the command
 ```
 vol -f memdump.mem windows.info 
 ```
-![[Pasted image 20251021143433.png]]
+![](../../../Images/Pasted%20image%2020251021143433.png)
 ```
 Y
 ```
 ##### What is the Verison of the Windows OS  
-![[Pasted image 20251021143551.png]]
+![](../../../Images/Pasted%20image%2020251021143551.png)
 ```
 10
 ```
 ##### What is the base address of the kernel?
-![[Pasted image 20251021143711.png]]
+![](../../../Images/Pasted%20image%2020251021143711.png)
 ```
 0xf8066161b000
 ```
@@ -226,7 +226,7 @@ Great. We identify a possible malicious process and should note the information,
 vol -f memdump.mem windows.netscan
 ```
 execute the command and look for the established connections on port 80
-![[Pasted image 20251021144523.png]]
+![](../../../Images/Pasted%20image%2020251021144523.png)
 ```
 192.168.182.128
 ```
@@ -240,7 +240,7 @@ msedge.exe
 vol -f memdump.mem windows.pstree
 ```
 after executing the command look for the process critical_updat , it's child process pid 
-![[Pasted image 20251021144957.png]]
+![](../../../Images/Pasted%20image%2020251021144957.png)
 ```
 1612
 ```
@@ -316,20 +316,20 @@ Excellent. We collected valuable information from the memory dump, including the
 
 ##### Analyzing the "windows.filescan" output, what is the full path and name for critical_updat?
 use the command `vol -f memdump.mem windows.filescan` > filescan , the use grep to filter `cat filescan | grep critical_updat
-![[Pasted image 20251021151046.png]]
+![](../../../Images/Pasted%20image%2020251021151046.png)
 `
 ```
 C:\Users\user01\Documents\critical_update.exe
 ```
 ##### Analyzing the "windows.mftscan.MFTScan" what is the Timestamp for the created date of important_document.pdf?  
 use the command `vol -f memdump.mem windows.mftscan.MFTScan > mftscan` to get the data about the ADS , the filter the output
-![[Pasted image 20251021151504.png]]
+![](../../../Images/Pasted%20image%2020251021151504.png)
 ```
 2024-02-24 20:39:42.000000 
 ```
 ##### Analyzing the updater.exe memory output, can you observe the HTTP request and determine the server used by the attacker?
 first dump the memory related to the malicious process of pid 1612 with the command  `vol -f memdump.mem -o . windows.memmap --dump --pid 1612` after use strings , filter the output using grep   `strings pid.1612.dmp | grep -i http `
-![[Pasted image 20251021151913.png]]
+![](../../../Images/Pasted%20image%2020251021151913.png)
 ```
 SimpleHTTP/0.6 Python/3.10.4
 ```
